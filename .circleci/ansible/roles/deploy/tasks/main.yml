@@ -1,0 +1,38 @@
+---
+- name: Update and upgrade packages
+  become: yes
+  apt:
+    upgrade: yes
+    # update_cache: true
+    cache_valid_time: 86400
+
+- name: Remove unuse dependencies
+  become: yes
+  apt:
+    autoremove: yes
+
+- name: Install dependencies
+  become: yes
+  apt: 
+    name: ['nodejs', 'npm']
+    state: latest
+    # update_cahche: yes
+
+- name: Install pm2
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+
+- name: Extract artifacts
+  become: yes
+  unarchive:
+    src: files/artifact.tar.gz
+    dest: .
+
+- name: Start app
+  become: yes
+  shell: |
+    pm2 delete all
+    pm2 start npm -- start
