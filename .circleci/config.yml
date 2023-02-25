@@ -211,6 +211,7 @@ jobs:
           command: |
             cd backend
             npm install
+            npm audit fix --force --audit-level=critical
             npm run migrations >> migrations_dump.txt
       - run:
           name: Send migration results to kvdb
@@ -302,4 +303,4 @@ workflows:
       - run-migrations:
           requires: [configure-infrastructure]
       - deploy-frontend:
-          requires: [run-migrations]
+          
