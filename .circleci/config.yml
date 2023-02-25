@@ -164,12 +164,12 @@ deploy-infrastructure:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text) >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
-        - persist_to_workspace:
-            root: ~/
-            paths:
-              - project/.circleci/ansible/inventory.txt
-        - destroy-environment
-            workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+    - persist_to_workspace:
+        root: ~/
+        paths:
+          - project/.circleci/ansible/inventory.txt
+    - destroy-environment
+            
           
       
 workflows:
