@@ -131,6 +131,15 @@ jobs:
       - slack/notify:
           event: fail
           template: basic_fail_1
+
+notify_on_success:
+  docker:
+    - image: cimg/base:stable
+        steps:
+          - slack/notify:
+              event: pass
+              channel: pipeline-ci-cd
+              template: success_deployment_1
           
       
 workflows:
