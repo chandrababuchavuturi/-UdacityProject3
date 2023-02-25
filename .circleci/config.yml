@@ -33,8 +33,7 @@ commands:
             npm install
             npm run build
             npm run migrations:revert
-           
-            
+                      
 jobs:
   build-frontend:
     docker:
@@ -196,7 +195,7 @@ jobs:
           command: |
             sudo apt install -v tar gzip curl
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip -qq awscliv2.zip
+            unzip  awscliv2.zip
             sudo ./aws/install
       - restore_cache:
           keys: [backend-build]
@@ -224,7 +223,6 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update --no-cache tar gzip nodejs npm aws-cli
-      
       - run:
           name: Get backend url
           command: |
