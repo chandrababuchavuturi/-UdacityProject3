@@ -209,3 +209,6 @@ workflows:
           filters:
             branches:
               only: [circleci-project-setup]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+          
