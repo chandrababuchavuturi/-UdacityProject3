@@ -29,6 +29,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
+            apk add --update --no-cache curl npm aws-cli
             cd ~/project/backend
             npm install
             npm run build
