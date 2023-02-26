@@ -205,7 +205,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm i
+            npm install
             npm run build
             npm run migrations >> migrations.txt
             cat migrations.txt
@@ -253,6 +253,7 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          
   deploy-backend:
     docker:
       - image: python:3.8-alpine
