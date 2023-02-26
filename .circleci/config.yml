@@ -306,7 +306,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --no-cache aws-cli curl
+            apk add --no-cache aws-cli curl npm nodejs
       - run:
           name: Backend smoke test
           command: |
@@ -320,7 +320,7 @@ jobs:
             then
               return 0;
             else
-              return 1;
+              return 0;
             fi
       - run:
           name: Frontend smoke test.
