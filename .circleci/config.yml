@@ -283,6 +283,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: |
+            apk add --update --no-cache curl aws-cli
+      - run:
           name: Get backend url
           command: |
             export BACKEND_URL=$(sed -n 2p .circleci/ansible/inventory.txt)
@@ -298,7 +302,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-us-ease-1.amazonaws.com" 
+            export URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-ease-1.amazonaws.com/#/employees" 
             echo $URL
             if curl -s ${URL} | grep "Welcome"
             then
