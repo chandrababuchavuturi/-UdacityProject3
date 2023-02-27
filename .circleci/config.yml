@@ -35,10 +35,14 @@ commands:
           when: on_fail
           command: |
             apk add --update --no-cache curl npm aws-cli
-            cd ~/project/backend
-            npm install
-            npm run build
-            npm run migrations:revert
+            SUCCESS=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>)
+            if(( $SUCCESS==1 )); 
+            then
+              cd ~/project/backend
+              npm install
+              npm run build
+              npm run migration:revert
+            fi
                       
 jobs:
   build-frontend:
@@ -318,8 +322,10 @@ jobs:
             echo "${API_URL}"
             if curl --connect-timeout 5 "${API_URL}/api/status" | grep "ok";
             then
+              echo 0            
               return 0;
             else
+              echo 1
               return 0;
             fi
       - run:
@@ -377,6 +383,7 @@ jobs:
                 --query "StackSummaries[*].StackName" \
                 --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
             echo Stack names: "${STACKS[@]}"
+            echo Stack : "${STACKS}"
             export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/old_workflow_id)
             echo Old Workflow ID: $OldWorkflowID 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
