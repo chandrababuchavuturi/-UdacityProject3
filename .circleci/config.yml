@@ -344,10 +344,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            yum install -y node nodejs
+      - run: yum install -y tar gzip
       - run:
           name: Save Old Workflow ID to kvdb.io
           command: |
@@ -372,10 +369,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            yum install -y node nodejs 
+      - run: yum install -y node nodejs 
       - run:
           name: Remove old stacks and files
           command: |
