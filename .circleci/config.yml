@@ -346,11 +346,10 @@ jobs:
       - run:
           name: Save Old Workflow ID to kvdb.io
           command: |
-            export OLD_WORKFLOW_ID=$(aws cloudformation \
-                      list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-                      --output text)
-            echo "Old Wokflow ID: $OLD_WORKFLOW_ID"
-            ##curl https://kvdb.io/${KVDB_BUCKET}/old_workflow_id -d "${OLD_WORKFLOW_ID}"
+            export OldWorkflowID=$(aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+              --output text)
+            echo "Old Wokflow ID: $OldWorkflowID"
       - run:
           name: Update cloudfront distribution
           command: |
@@ -381,9 +380,10 @@ jobs:
             echo Old Workflow ID: $OldWorkflowID 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+              echo 0
+              #aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              #aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+              #aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
             fi
         
 
