@@ -199,10 +199,10 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
             cat backend/.env
             pwd
-            cat ./.circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
             export ANSIBLE_HOST_KEY_CHECKING=false
             cd .circleci/ansible
-            ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/configure-server.yml
+            ansible-playbook -i inventory.txt configure-server.yml
       - persist_to_workspace:
           root: .
           paths:
