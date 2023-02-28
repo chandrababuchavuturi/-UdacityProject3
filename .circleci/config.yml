@@ -377,7 +377,10 @@ jobs:
                 --query "StackSummaries[*].StackName" \
                 --stack-status-filter CREATE_COMPLETE --output text)) 
             echo Stack names: "${STACKS[@]}"
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/old_workflow_id)
+            ####export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/old_workflow_id)
+            export OldWorkflowID=$(aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+              --output text)
             echo Old Workflow ID: $OldWorkflowID 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
