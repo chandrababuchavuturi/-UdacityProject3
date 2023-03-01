@@ -162,11 +162,13 @@ jobs:
             BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text) >> ~/project/.circleci/ansible/inventory.txt
+              --output text) 
+              echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
-          root: ~/
+          root: .
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - .circleci/ansible/inventory.txt
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   configure-infrastructure:
@@ -175,7 +177,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["b3:5b:c9:f5:c8:96:99:56:9b:33:41:a5:b3:6e:49:02"]
+          fingerprints: ["d6:51:e9:98:db:2f:2c:ab:de:d4:c7:65:2e:60:94:e0"]
       - run:
           name: Install dependencies
           command: |
@@ -196,12 +198,15 @@ jobs:
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
             cat backend/.env
+            pwd
+            cat .circleci/ansible/inventory.txt
+            export ANSIBLE_HOST_KEY_CHECKING=false
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
       - persist_to_workspace:
-          root: ~/
+          root: .
           paths:
-            - project/backend
+            - backend/
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   run-migrations:
@@ -219,9 +224,9 @@ jobs:
       - run:
           name: Send migration results to kvdb.io
           command: |
-            if grep -q 'has been executed successfully.' ~/project/backend/migrations_log.txt
+            if grep -q 'has been executed successfully.' migrations_log.txt
             then
-              curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+              touch ~/project/.circleci/db_migration_success
             fi
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -246,6 +251,7 @@ jobs:
             --filters Name=tag:aws:cloudformation:stack-name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
+            curl -s http://${BACKEND_IP}:3030
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
@@ -270,7 +276,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["b3:5b:c9:f5:c8:96:99:56:9b:33:41:a5:b3:6e:49:02"]
+          fingerprints: ["d6:51:e9:98:db:2f:2c:ab:de:d4:c7:65:2e:60:94:e0"]
       - run:
           name: Install dependencies
           command: |
@@ -287,8 +293,9 @@ jobs:
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
-            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mkdir -p .circleci/ansible/roles/deploy/files/
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+            ls .circleci/ansible/roles/deploy/files/
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -----$(cat inventory.txt)"
             ansible-playbook -i inventory.txt deploy-backend.yml
@@ -316,8 +323,10 @@ jobs:
             echo "${API_URL}"
             if curl --connect-timeout 5 "${API_URL}/api/status" | grep "ok";
             then
+               echo 0;
               return 0;
             else
+              echo 1;
               return 0;
             fi
       - run:
