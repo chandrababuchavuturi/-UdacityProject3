@@ -242,7 +242,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update --no-cache tar gzip nodejs npm aws-cli
+            apk add --update --no-cache tar gzip nodejs curl npm aws-cli
       - run:
           name: Get backend url
           command: |
