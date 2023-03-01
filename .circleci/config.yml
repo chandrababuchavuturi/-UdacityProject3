@@ -252,6 +252,13 @@ jobs:
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
+            if curl --connect-timeout 5 "${API_URL}/api/status" | grep "ok";
+            then
+               echo 0;
+            else
+              echo 1;
+            fi
+            echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
       - restore_cache:
@@ -410,5 +417,3 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
