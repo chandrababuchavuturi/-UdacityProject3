@@ -177,7 +177,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["b3:5b:c9:f5:c8:96:99:56:9b:33:41:a5:b3:6e:49:02"]
+          fingerprints: ["d6:51:e9:98:db:2f:2c:ab:de:d4:c7:65:2e:60:94:e0"]
       - run:
           name: Install dependencies
           command: |
@@ -218,7 +218,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm i
+            npm install
             npm run build && npm run migrations > migrations_log.txt
             cat migrations_log.txt
       - run:
@@ -275,7 +275,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["b3:5b:c9:f5:c8:96:99:56:9b:33:41:a5:b3:6e:49:02"]
+          fingerprints: ["d6:51:e9:98:db:2f:2c:ab:de:d4:c7:65:2e:60:94:e0"]
       - run:
           name: Install dependencies
           command: |
@@ -294,7 +294,7 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             mkdir -p .circleci/ansible/roles/deploy/files/
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
-            ls .circleci/ansible/roles/deploy_backend/files/
+            ls .circleci/ansible/roles/deploy/files/
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -----$(cat inventory.txt)"
             ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/deploy-backend.yml
