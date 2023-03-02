@@ -401,7 +401,6 @@ workflows:
   default:
     jobs:
       - run-migrations:
-          requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
       - deploy-backend:
