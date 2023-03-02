@@ -214,9 +214,10 @@ jobs:
       - image: 'cimg/base:stable'
     steps:
       - checkout
-      - node/install:
-          install-yarn: true
-          node-version: '16.13'
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update --no-cache aws-cli
       - run: |
           node --version
           java --version
