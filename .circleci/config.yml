@@ -173,7 +173,7 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   configure-infrastructure:
     docker:
-      - image: cimg/node:13.8.0
+      - image: cimg/base:stable
         environment:
           NODE_ENV: "local"
           VERSION: "1"
