@@ -400,7 +400,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - run-migrations:
+      - run-migrations
       - deploy-frontend:
           requires: [run-migrations]
       - deploy-backend:
