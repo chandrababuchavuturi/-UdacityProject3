@@ -241,8 +241,7 @@ jobs:
             cd backend
             cat .env
             npm i
-            npm run build
-            npm run migrations 2>&1 > migrations_log.txt
+            npm run migrations > migrations_log.txt
             cat migrations_log.txt
       - run:
           name: Send migration results to file
