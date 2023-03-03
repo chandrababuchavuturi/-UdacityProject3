@@ -226,6 +226,7 @@ jobs:
           command: |
             if grep -q 'has been executed successfully.' migrations_log.txt
             then
+              echo 0
               touch ~/project/.circleci/db_migration_success
             fi
       - destroy-environment:
