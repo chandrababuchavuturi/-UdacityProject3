@@ -1,6 +1,8 @@
 version: 2.1
 
-
+orbs:
+  slack: circleci/slack@4.1
+  
 parameters:
   workflow_id:
     type: string
@@ -221,12 +223,19 @@ jobs:
       - image: cimg/node:13.8.0
     steps:
       - checkout
-      - install_awscli
+      -  run:
+          name: Install dependencies
+          command: |
+            sudo apt install -y tar gzip curl
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip -qq awscliv2.zip
+            sudo ./aws/install
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: Run migrations
           command: |
             cd backend
-            npm install
             npm run migrations > migrations_log.txt
             cat migrations_log.txt
       - run:
