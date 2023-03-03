@@ -211,7 +211,7 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   run-migrations:
     docker:
-      - image: 'circleci/node:13.8.0'
+      - image: 'sleavely/node-awscli:14.x'
     steps:
       - checkout
       - attach_workspace:
@@ -220,6 +220,8 @@ jobs:
           name: Run migrations
           command: |
             cd backend
+            npm i
+            npm run build
             npm run migrations > migrations_log.txt
             cat migrations_log.txt
       - run:
