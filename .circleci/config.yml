@@ -236,12 +236,12 @@ jobs:
             echo TYPEORM_PORT=5432 >> backend/.env
             echo TYPEORM_USERNAME=postgres >> backend/.env
             echo TYPEORM_PASSWORD=Mounika2 >> backend/.env
-      - restore_cache:
-          keys: [backend-build]
       - run:
           name: Run migrations
           command: |
             cd backend
+            npm install
+            npm build
             npm run migrations > migrations_log.txt
             cat migrations_log.txt
       - run:
