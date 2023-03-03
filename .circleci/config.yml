@@ -211,22 +211,13 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   run-migrations:
     docker:
-      - image: 'python:3.8-alpine'
+      - image: 'circleci/node:13.8.0'
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update --no-cache npm nodejs aws-cli
-      - run: |
-          node --version
       - run:
           name: Run migrations
           command: |
             cd backend
-            npm install
-            npm run build
-            npm update
             npm run migrations > migrations_log.txt
             cat migrations_log.txt
       - run:
