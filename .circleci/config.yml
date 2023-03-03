@@ -220,7 +220,7 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   run-migrations:
     docker:
-      - image: cimg/node:19.7.0
+      - image: sleavely/node-awscli:14.x
     steps:
       - checkout
       - run:
