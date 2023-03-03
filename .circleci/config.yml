@@ -211,7 +211,7 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   run-migrations:
     docker:
-      - image: 'cimg/base:stable'
+      - image: 'python:3.8-alpine'
     steps:
       - checkout
       - run:
