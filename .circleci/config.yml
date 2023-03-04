@@ -268,7 +268,6 @@ jobs:
             npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-            
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -298,9 +297,10 @@ jobs:
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
-            mkdir -p .circleci/ansible/roles/deploy/files/
-            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
-            ls .circleci/ansible/roles/deploy/files/
+            ##mkdir -p .circleci/ansible/roles/deploy/files/
+            ##mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+            ##ls .circleci/ansible/roles/deploy/files/
+            ls
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -----$(cat inventory.txt)"
             ansible-playbook -i inventory.txt deploy-backend.yml
