@@ -173,7 +173,7 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   configure-infrastructure:
     docker:
-    - image: python:3.9.1-alpine3.12
+    - image: python:3.7-alpine3.16
     steps:
       - checkout
       - add_ssh_keys:
@@ -211,7 +211,7 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   run-migrations:
     docker:
-    - image: circleci/node:13.8.0
+    - image: python:3.7-alpine3.16
     steps:
       - checkout
       - restore_cache:
@@ -233,14 +233,15 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt update
-            sudo apt install -y awscli
+           apk add --update --no-cache tar gzip ansible aws-cli
       - run:
           name: Run migrations
           command: |
             cd backend
             cat .env
-            npm i
+            npm install
+            npm build
+            npm audit fix --force --audit-level=critical
             npm run migrations > migrations_log.txt
             cat migrations_log.txt
       - run:
